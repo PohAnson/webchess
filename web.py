@@ -14,7 +14,6 @@ def main():
         wname, bname = request.form['wname'], request.form['bname']
         # players = f"{wname} vs {bname}"
         board = Board()
-        
         return render_template('game.html', ui=ui)
 
     @app.route('/error', methods=['POST'])
