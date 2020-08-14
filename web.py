@@ -1,5 +1,5 @@
 from flask import Flask,render_template, request
-from chess import WebInterface, Board
+from chess import *
 
 def main():
     app = Flask(__name__)
