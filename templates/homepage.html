@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <head>
   <title>ChessFlask</title>
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
 </head>
 
+
 <body>
-  <h1>Welcome to ChessFlask!</h1>
-  <img alt="chess" src="chess.png" />
-  <form action="/newgame" method="post">
+
+<div class="hero-image">
+  <div class="hero-text">
+    <h1 style="font-size:50px">Welcome to ChessFlask!</h1>
+    <form action="/newgame" method="post">
     <p>White player: <input type="text" name="wname" value="" /><br /></p>
     <p>Black player: <input type="text" name="bname" value="" /><br /></p>
     <input type="submit" value="Start new game" />
   </form>
+  </div>
+</div>
+
 </body>
