@@ -5,8 +5,8 @@
 
 <body>
   <div style="align-content: center;">
-    <p>{{ ui.board }}</p>
-    <form action="{{" next_link }} method="POST">
+    <p style='text-align: center;'>{{ ui.board }}</p>
+    <form action="{{ next_link }} method="POST">
       <p>{{ ui.inputlabel }}:</p>
       <input type="text" name="move" value="" />
       <p>{{ ui.errmsg }}</p>
