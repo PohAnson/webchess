@@ -355,7 +355,7 @@ class Board:
 
         for piece in self.pieces():
             piece.notmoved = True
-
+    
     def display(self):
         '''
         Displays the contents of the board.
@@ -372,25 +372,29 @@ class Board:
             return f'{colour_sym}{piece_sym}'
 
         # Row 7 is at the top, so print in reverse order
-        print(' ' * 4, end='')
-        print('  '.join([f'{i:2}' for i in range(8)]), end='\n\n')
+        row_list = []
+        temp=[]
+        temp.append(' ' * 4)
+        for i in range(8):
+            temp.append(f"{(' ' * 2)}{i}")
+        row_list.append(temp)
+
         for row in range(7, -1, -1):
-            print(f'{row:2}  ', end='')
+            temp = []
+            temp.append(f"{row:2}{' ' * 2}")
             for col in range(8):
                 coord = (col, row)  # tuple
                 if coord in self.coords():
                     piece = self.get_piece(coord)
-                    print(f'{sym(piece)}', end='')
+                    temp.append(f'{sym(piece)}')
                 else:
                     piece = None
-                    print('  ', end='')
-                if col == 7:     # Put line break at the end
-                    print('')
-                else:            # Print two spaces between pieces
-                    print('  ', end='')
-            print(' '*15)
+                    temp.append((' ' * 2))
+            row_list.append(temp)
             if self.checkmate is not None:
                 print(f'{self.checkmate} is checkmated!')
+        print( "ROW LIST: \n\n", row_list)
+        return row_list
 
     def prompt(self):
         if self.debug:
@@ -463,3 +467,8 @@ class Board:
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
+
+# board = Board()
+# board.start()
+# board.display()
+# input()

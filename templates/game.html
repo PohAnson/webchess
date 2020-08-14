@@ -4,25 +4,25 @@
 </head>
 
 <body>
-    <center>
+    <centre>
         <div style="align-content: center;">
-        <p style='text-align: center;'>{{ ui.board }}</p>
-        <form action="{{ next_link }} method="POST">
+        <table style="border: 2px solid;">
+          {% for row in ui.board %}
+          <tr>
+          {% for cell in row %}
+          <td style="align-content: center; size: 10px; border: 2px solid;">{{ cell }}</td>
+          {% endfor %}
+      </tr>
+  {% endfor %}
+  </table>
+        <form action="{{ next_link }}" method="POST">
         <p>{{ ui.inputlabel }}:</p>
         <input type="text" name="move" value="" />
         <p>{{ ui.errmsg }}</p>
         <input type="submit" value="{{ ui.btnlabel }}" />
     </form>
-    <table>
-        {% for row in ui.board %}
-        <tr>
-        {% for cell in row %}
-        <td>{{ cell }}</td>
-        {% endfor %}
-    </tr>
-{% endfor %}
-</table>
 
-    </center>
+
+    </centre>
   </div>
 </body>

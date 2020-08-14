@@ -4,7 +4,9 @@ from chess import *
 def main():
     app = Flask(__name__)
     ui = WebInterface()
-
+    board = Board()
+    board.start()
+    # board.display()
     @app.route('/')
     def root():
         return render_template('homepage.html')
@@ -13,9 +15,9 @@ def main():
     def newgame():
         wname, bname = request.form['wname'], request.form['bname']
         # players = f"{wname} vs {bname}"
-        board = Board()
-        
-        return render_template('game.html', ui=ui)
+        # nextlink=r"/error"
+        ui.board = board.display()
+        return render_template('game.html', ui=ui)#, nextlink=nextlink)
 
     @app.route('/error', methods=['POST'])
     def error():
@@ -27,4 +29,7 @@ def main():
         ui.inputlabel="Which piece do you want to promote?"
         ui.btnlabel='promote'
         return render_template('game.html', ui=ui)
-    app.run('0.0.0.0', debug=False)
+    # app.run('0.0.0.0', debug=False)
+    app.run()
+
+main()
