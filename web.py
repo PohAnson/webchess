@@ -1,12 +1,13 @@
-from flask import Flask,render_template, request
-from chess import *
+from flask import Flask, render_template, request, redirect
+from chess import Board, WebInterface
+
 
 def main():
     app = Flask(__name__)
     ui = WebInterface()
     board = Board()
     board.start()
-    # board.display()
+
     @app.route('/')
     def root():
         return render_template('homepage.html')
@@ -14,7 +15,7 @@ def main():
     @app.route('/newgame', methods=['POST'])
     def newgame():
         ui.wname, ui.bname = request.form['wname'], request.form['bname']
-        ui.next_link=r"/play"
+        ui.next_link = "/play"
         ui.board = board.display()
         return render_template('game.html', ui=ui)
 
@@ -25,13 +26,13 @@ def main():
 
     @app.route('/error', methods=['POST'])
     def error():
-        ui.errmsg='ERROR VARIABLE'
+        ui.errmsg = 'ERROR VARIABLE'
         return render_template('game.html', ui=ui)
 
     @app.route('/promote', methods=['POST'])
     def promote():
-        ui.inputlabel="Which piece do you want to promote?"
-        ui.btnlabel='promote'
+        ui.inputlabel = "Which piece do you want to promote?"
+        ui.btnlabel = 'promote'
         return render_template('game.html', ui=ui)
     # app.run('0.0.0.0', debug=False)
     app.run()

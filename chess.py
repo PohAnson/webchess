@@ -4,10 +4,9 @@ class WebInterface:
         self.btnlabel = None
         self.errmsg = None
         self.board = None
-        self.next_link=None
+        self.next_link = None
         self.wname = None
         self.bname = None
-
 
 
 class MoveError(Exception):
@@ -16,17 +15,17 @@ class MoveError(Exception):
 
 
 class BasePiece:
-    def __init__(self,colour):
+    def __init__(self, colour):
         if type(colour) != str:
             raise TypeError('colour argument must be str')
-        elif colour.lower() not in {'white','black'}:
+        elif colour.lower() not in {'white', 'black'}:
             raise ValueError('colour must be {white,black}')
         else:
             self.colour = colour
 
     def __repr__(self):
         return f'BasePiece({repr(self.colour)})'
-    
+
     def __str__(self):
         try:
             return f'{self.colour} {self.name}'
@@ -43,9 +42,10 @@ class BasePiece:
 
 class King(BasePiece):
     name = 'king'
+
     def __repr__(self):
         return f'King({repr(self.colour)})'
-    
+
     def isvalid(self, start: tuple, end: tuple):
         '''King can move 1 step horizontally or vertically.'''
         x, y, dist = self.vector(start, end)
@@ -54,6 +54,7 @@ class King(BasePiece):
 
 class Queen(BasePiece):
     name = 'queen'
+
     def __repr__(self):
         return f'Queen({repr(self.colour)})'
 
@@ -69,6 +70,7 @@ class Queen(BasePiece):
 
 class Bishop(BasePiece):
     name = 'bishop'
+
     def __repr__(self):
         return f'Bishop({repr(self.colour)})'
 
@@ -82,6 +84,7 @@ class Bishop(BasePiece):
 
 class Knight(BasePiece):
     name = 'knight'
+
     def __repr__(self):
         return f'Knight({repr(self.colour)})'
 
@@ -95,6 +98,7 @@ class Knight(BasePiece):
 
 class Rook(BasePiece):
     name = 'rook'
+
     def __repr__(self):
         return f'Rook({repr(self.colour)})'
 
@@ -108,7 +112,7 @@ class Rook(BasePiece):
             if start[1] != end[1] != row:
                 return False
             elif not((start[0] == 0 and end[0] == 3)
-                   or (start[0] == 7 and end[0] == 5)):
+                     or (start[0] == 7 and end[0] == 5)):
                 return False
             else:
                 return True
@@ -121,6 +125,7 @@ class Rook(BasePiece):
 
 class Pawn(BasePiece):
     name = 'pawn'
+
     def __repr__(self):
         return f'Pawn({repr(self.colour)})'
 
@@ -140,7 +145,7 @@ class Board:
 
     turn <{'white', 'black'}>
         The current player's colour.
-    
+
     winner <{'white', 'black', None}>
         The winner (if game has ended).
         If game has not ended, returns None
@@ -149,7 +154,7 @@ class Board:
         Whether any player is checkmated.
 
     METHODS
-    
+
     start()
         Start a game. White goes first.
 
@@ -168,12 +173,13 @@ class Board:
     update(start, end)
         Carries out the move (start -> end) and updates the board.
     '''
+
     def __init__(self, **kwargs):
         self.debug = kwargs.get('debug', False)
         self._position = {}
         self.winner = None
         self.checkmate = None
-    
+
     def coords(self):
         return list(self._position.keys())
 
@@ -219,7 +225,7 @@ class Board:
             if piece.colour == colour and piece.name == name:
                 return True
         return False
-    
+
     def promotepawns(self, PieceClass=None):
         for coord in self.coords():
             row = coord[1]
@@ -305,8 +311,8 @@ class Board:
     @classmethod
     def promoteprompt(cls):
         choice = input(f'Promote pawn to '
-                    '(r=Rook, k=Knight, b=Bishop, '
-                    'q=Queen): ').lower()
+                       '(r=Rook, k=Knight, b=Bishop, '
+                       'q=Queen): ').lower()
         if choice not in 'rkbq':
             return cls.promoteprompt()
         elif choice == 'r':
@@ -353,12 +359,12 @@ class Board:
         self.add((7, 0), Rook(colour))
         for x in range(0, 8):
             self.add((x, 1), Pawn(colour))
-        
+
         self.turn = 'white'
 
         for piece in self.pieces():
             piece.notmoved = True
-    
+
     def display(self):
         '''
         Displays the contents of the board.
@@ -369,6 +375,7 @@ class Board:
         if self.debug:
             print('== DEBUG MODE ON ==')
         # helper function to generate symbols for piece
+
         def sym(piece):
             colour_sym = piece.colour[0].upper()
             piece_sym = piece.name[0].upper()
@@ -376,7 +383,7 @@ class Board:
 
         # Row 7 is at the top, so print in reverse order
         row_list = []
-        temp=[]
+        temp = []
         temp.append(' ' * 4)
         for i in range(8):
             temp.append(f"{(' ' * 2)}{i}")
@@ -396,12 +403,13 @@ class Board:
             row_list.append(temp)
             if self.checkmate is not None:
                 print(f'{self.checkmate} is checkmated!')
-        print( "ROW LIST: \n\n", row_list)
+        print("ROW LIST: \n\n", row_list)
         return row_list
 
     def prompt(self):
         if self.debug:
             print('== PROMPT ==')
+
         def valid_format(inputstr):
             return len(inputstr) == 5 and inputstr[2] == ' ' \
                 and inputstr[0:1].isdigit() \
@@ -456,7 +464,7 @@ class Board:
             self.move(start, end)
         else:
             raise MoveError('Unknown error, please report '
-                             f'(movetype={repr(movetype)}).')
+                            f'(movetype={repr(movetype)}).')
         self.promotepawns()
         if not self.alive('white', 'king'):
             self.winner = 'black'
@@ -470,8 +478,3 @@ class Board:
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
-
-# board = Board()
-# board.start()
-# board.display()
-# input()
