@@ -17,12 +17,21 @@ def main():
         ui.wname, ui.bname = request.form['wname'], request.form['bname']
         ui.next_link = "/play"
         ui.board = board.display()
+        # ui.inputlabel = f'{game.turn} player: '
+        # ui.errmsg = None
+        # ui.btnlabel = 'Move'
+        #return redirect('/play')
         return render_template('game.html', ui=ui)
 
     @app.route('/play', methods=['POST'])
     def play():
         pass
+        # TODO: get player move from GET request object
+        # TODO: if there is no player move, render the page template
         return render_template('game.html', ui=ui)
+        # TODO: Validate move, redirect player back to /play again if move is invalid
+        # If move is valid, check for pawns to promote
+        # Redirect to /promote if there are pawns to promote, otherwise 
 
     @app.route('/error', methods=['POST'])
     def error():
@@ -34,7 +43,7 @@ def main():
         ui.inputlabel = "Which piece do you want to promote?"
         ui.btnlabel = 'promote'
         return render_template('game.html', ui=ui)
-    # app.run('0.0.0.0', debug=False)
+    app.run('0.0.0.0', debug=False)
     app.run()
 
     @app.route('/validation')
