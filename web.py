@@ -18,6 +18,11 @@ def main():
         ui.board = board.display()
         return render_template('game.html', ui=ui)
 
+    @app.route('/play', methods=['POST'])
+    def play():
+        pass
+        return render_template('game.html', ui=ui)
+
     @app.route('/error', methods=['POST'])
     def error():
         ui.errmsg='ERROR VARIABLE'
@@ -30,5 +35,11 @@ def main():
         return render_template('game.html', ui=ui)
     # app.run('0.0.0.0', debug=False)
     app.run()
+
+    @app.route('/validation')
+    def validation():
+        # May need to return redirect to the correct page. and edit the ui object
+        pass
+
 
 main()
