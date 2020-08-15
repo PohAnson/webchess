@@ -13,10 +13,10 @@ def main():
 
     @app.route('/newgame', methods=['POST'])
     def newgame():
-        # nextlink=r"/error"
         ui.wname, ui.bname = request.form['wname'], request.form['bname']
+        ui.next_link=r"/play"
         ui.board = board.display()
-        return render_template('game.html', ui=ui)#, nextlink=nextlink)
+        return render_template('game.html', ui=ui)
 
     @app.route('/error', methods=['POST'])
     def error():

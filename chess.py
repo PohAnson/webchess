@@ -4,6 +4,7 @@ class WebInterface:
         self.btnlabel = None
         self.errmsg = None
         self.board = None
+        self.next_link=None
         self.wname = None
         self.bname = None
 
