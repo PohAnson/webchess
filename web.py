@@ -13,9 +13,8 @@ def main():
 
     @app.route('/newgame', methods=['POST'])
     def newgame():
-        wname, bname = request.form['wname'], request.form['bname']
-        # players = f"{wname} vs {bname}"
         # nextlink=r"/error"
+        ui.wname, ui.bname = request.form['wname'], request.form['bname']
         ui.board = board.display()
         return render_template('game.html', ui=ui)#, nextlink=nextlink)
 
