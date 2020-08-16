@@ -1,135 +1,155 @@
 <!DOCTYPE html>
 <head>
   <title>Chess Game</title>
-    <style>
-    .chessboard{
-        width:400px;
-        height:400px;
-        margin:0px;
-        text-align: centre;
-        margin-left:auto;
-        margin-right:auto;
-        border:5px solid #fff;}
-    .black{
-        float:left;
-        width:50px;
-        height:50px;
-        background-color:#FFD9EA;
-        font-size:30px;
-        text-align:center;
-        display:table-cell;
-        vertical-align:middle;}
-    .white{
-        float:left;
-        width:50px;
-        height:50px;
-        background-color:#fff;
-        font-size:30px;
-        text-align:center;
-        display:table-cell;
-        vertical-align:middle;}
-    .title{
-        text-align: center;
-        color: #000000;}
-    </style>
-  </head>
-  <body style="background-color:#FFD9EA;">
-        <div class="chessboard" style=text-align:"center">
-            <div class="white"style=colour:red;>&#9820;</div>
-            <div class="black">&#9822;</div>
-            <div class="white">&#9821;</div>
-            <div class="black">&#9819;</div>
-            <div class="white">&#9818;</div>
-            <div class="black">&#9821;</div>
-            <div class="white">&#9822;</div>
-            <div class="black">&#9820;</div>
+  <style>
+    .chessboard {
+      width: 400px;
+      height: 400px;
+      margin: 0px;
+      text-align: centre;
+      margin-left: auto;
+      margin-right: auto;
+      border: 5px solid #fff;
+    }
+    .black {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background-color: #ffd9ea;
+      font-size: 30px;
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .white {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background-color: #fff;
+      font-size: 30px;
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .title {
+      text-align: center;
+      color: #000000;
+    }
 
-            <div class="black">&#9823;</div>
-            <div class="white">&#9823;</div>
-            <div class="black">&#9823;</div>
-            <div class="white">&#9823;</div>
-            <div class="black">&#9823;</div>
-            <div class="white">&#9823;</div>
-            <div class="black">&#9823;</div>
-            <div class="white">&#9823;</div>
-
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="white"></div>
-
-            <div class="white">&#9817;</div>
-            <div class="black">&#9817;</div>
-            <div class="white">&#9817;</div>
-            <div class="black">&#9817;</div>
-            <div class="white">&#9817;</div>
-            <div class="black">&#9817;</div>
-            <div class="white">&#9817;</div>
-            <div class="black">&#9817;</div>
-
-            <div class="black">&#9814;</div>
-            <div class="white">&#9816;</div>
-            <div class="black">&#9815;</div>
-            <div class="white">&#9813;</div>
-            <div class="black">&#9812;</div>
-            <div class="white">&#9815;</div>
-            <div class="black">&#9816;</div>
-            <div class="white">&#9814;</div>
-            </div>
-    </p>
+    .label {
+      float: left;
+      font-size: 30px;
+      display: table-cell;
+      text-align: center;
+    }
+    .corner {
+      width: 30px;
+      height: 30px;
+    }
+    .columnlabel {
+      width: 50px;
+      height: 30px;
+    }
+    .rowlabel {
+      width: 30px;
+      height: 50px;
+    }
+  </style>
 </head>
+<body style="background-color: #ffd9ea;">
+  <div class="chessboard" style="text-align: center;">
+    <div class="white" style="colour: red;">&#9820;</div>
+    <div class="black">&#9822;</div>
+    <div class="white">&#9821;</div>
+    <div class="black">&#9819;</div>
+    <div class="white">&#9818;</div>
+    <div class="black">&#9821;</div>
+    <div class="white">&#9822;</div>
+    <div class="black">&#9820;</div>
 
-<body>
+    <div class="black">&#9823;</div>
+    <div class="white">&#9823;</div>
+    <div class="black">&#9823;</div>
+    <div class="white">&#9823;</div>
+    <div class="black">&#9823;</div>
+    <div class="white">&#9823;</div>
+    <div class="black">&#9823;</div>
+    <div class="white">&#9823;</div>
 
-    
-  <div style="text-align: center;">
-    <table style="border: 2px solid; margin: auto;">
-      {% for row in ui.board %}
-      <tr>
-        {% for cell in row %}
-        <td style="align-content: center; size: 10px; border: 2px solid;">
-          {{ cell }}
-        </td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
-    <form action="{{ ui.next_link }}" method="POST">
-      <p>{{ ui.inputlabel }}:</p>
-      <input type="text" name="move" value="" />
-      <p>{{ ui.errmsg }}</p>
-      <input type="submit" value="{{ ui.btnlabel }}" />
-    </form>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+    <div class="black"></div>
+    <div class="white"></div>
+
+    <div class="white">&#9817;</div>
+    <div class="black">&#9817;</div>
+    <div class="white">&#9817;</div>
+    <div class="black">&#9817;</div>
+    <div class="white">&#9817;</div>
+    <div class="black">&#9817;</div>
+    <div class="white">&#9817;</div>
+    <div class="black">&#9817;</div>
+
+    <div class="black">&#9814;</div>
+    <div class="white">&#9816;</div>
+    <div class="black">&#9815;</div>
+    <div class="white">&#9813;</div>
+    <div class="black">&#9812;</div>
+    <div class="white">&#9815;</div>
+    <div class="black">&#9816;</div>
+    <div class="white">&#9814;</div>
   </div>
+
+  <body>
+    <div style="text-align: center;">
+      <table style="border: 2px solid #000000;">
+        {% for row in ui.board %}
+        <tr>
+          {% for cell in row %}
+          <td class="{{ cell.type }}">
+            {{ cell.text }}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+      <form action="{{ ui.next_link }}" method="POST">
+        <p>{{ ui.inputlabel }}:</p>
+        <input type="text" name="move" value="" />
+        <p>{{ ui.errmsg }}</p>
+        <input type="submit" value="{{ ui.btnlabel }}" />
+      </form>
+    </div>
+  </body>
 </body>
