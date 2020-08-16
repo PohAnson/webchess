@@ -34,8 +34,8 @@ def main():
         ui.inputlabel = "Which piece do you want to promote?"
         ui.btnlabel = 'promote'
         return render_template('game.html', ui=ui)
-    app.run('0.0.0.0', debug=False)
-    #app.run()
+    # app.run('0.0.0.0', debug=False)
+    app.run(debug=True)
 
     @app.route('/validation')
     def validation():
