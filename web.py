@@ -12,44 +12,45 @@ def main():
     def root():
         return render_template('homepage.html')
 
-    @app.route('/newgame', methods=['POST'])
+    @app.route('/newgame')
     def newgame():
-        ui.wname, ui.bname = request.form['wname'], request.form['bname']
-        ui.next_link = "/play"
-        ui.board = board.display()
-        # ui.inputlabel = f'{game.turn} player: '
-        # ui.errmsg = None
-        # ui.btnlabel = 'Move'
-        #return redirect('/play')
-        return render_template('game.html', ui=ui)
+        ui.players = {'white': request.args['wname'], 'black': request.args['bname']}
+        return redirect('/play')
 
-    @app.route('/play', methods=['POST'])
+    @app.route('/play')
     def play():
-        pass
-        # TODO: get player move from GET request object
         # TODO: if there is no player move, render the page template
+        ui.board = board.display()
+        ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
-        # TODO: Validate move, redirect player back to /play again if move is invalid
-        # If move is valid, check for pawns to promote
-        # Redirect to /promote if there are pawns to promote, otherwise 
 
-    @app.route('/error', methods=['POST'])
+    @app.route('/error')
     def error():
         ui.errmsg = 'ERROR VARIABLE'
         return render_template('game.html', ui=ui)
 
-    @app.route('/promote', methods=['POST'])
+    @app.route('/promote')
     def promote():
         ui.inputlabel = "Which piece do you want to promote?"
         ui.btnlabel = 'promote'
+        ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
-    app.run('0.0.0.0', debug=False)
-    # app.run(debug=True)
 
     @app.route('/validation')
     def validation():
-        # May need to return redirect to the correct page. and edit the ui object
-        pass
+        move = request.args['move']
+        ui.errmsg = None
+        status = board.prompt(move, ui)
+        if status == 'error':
+            return redirect('/error')
+        else:
+            start, end = status
+            if board.movetype(start, end) == 'promotion':
+                return redirect('/promotion')
+            board.update(start, end)
+            return redirect('/play')
 
+    # app.run('0.0.0.0', debug=False)
+    app.run(debug=True)
 
 main()
