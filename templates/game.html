@@ -71,7 +71,7 @@
         </tr>
         {% endfor %}
       </table>
-      <form action="{{ ui.next_link }}" method="GET">
+      <form action="/play" method="post">
         <p>{{ ui.inputlabel }}:</p>
         <input type="text" name="move" value="" />
         <p>{{ ui.errmsg }}</p>
