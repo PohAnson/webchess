@@ -283,6 +283,7 @@ class Board:
         'move' for normal moves
         'capture' for captures
         'castling' for rook castling
+        'promotion' for pawn promotion
         None for invalid moves
         '''
         if self.debug:
@@ -297,6 +298,10 @@ class Board:
         if start_piece is None \
                 or start_piece.colour != self.turn:
             return None
+        if end[1] in (0, 7) and start_piece.name == 'pawn':
+            if start_piece.isvalid(start, end, capture=True) or start_piece.isvalid(start, end, capture=False):
+                return 'promotion'
+            
         if end_piece is not None:
             if end_piece.colour != start_piece.colour:
                 return 'capture'
@@ -418,7 +423,7 @@ class Board:
         print("ROW LIST: \n\n", row_list)
         return row_list
 
-    def prompt(self):
+    def prompt(self, move, ui:WebInterface=WebInterface()):
         if self.debug:
             print('== PROMPT ==')
 
@@ -441,20 +446,23 @@ class Board:
             return (start, end)
 
         while True:
-            inputstr = input(f'{self.turn.title()} player: ')
+            inputstr = move
             if not valid_format(inputstr):
-                print('Invalid move. Please enter your move in the '
+                ui.errmsg = ('Invalid move. Please enter your move in the '
                       'following format: __ __, _ represents a digit.')
+                return 'error'
             elif not valid_num(inputstr):
-                print('Invalid move. Move digits should be 0-7.')
+                ui.errmsg = ('Invalid move. Move digits should be 0-7.')
+                return 'error'
             else:
                 start, end = split_and_convert(inputstr)
                 if self.movetype(start, end) is None:
-                    print('Invalid move. Please make a valid move.')
+                    ui.errmsg = ('Invalid move. Please make a valid move.')
+                    return 'error'
                 else:
                     return start, end
 
-    def update(self, start, end):
+    def update(self, start, end, promote_piece=None):
         '''
         Update board according to requested move.
         If an opponent piece is at end, capture it.
@@ -474,6 +482,11 @@ class Board:
         elif movetype == 'move':
             self.printmove(start, end)
             self.move(start, end)
+        elif movetype == 'promotion':
+            self.printmove(start, end)
+            self.move(start, end)
+            self.promotepawns(promote_piece)
+            assert False, 'NOT SURE IF WORKS!'
         else:
             raise MoveError('Unknown error, please report '
                             f'(movetype={repr(movetype)}).')
@@ -490,7 +503,3 @@ class Board:
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
-
-b = Board()
-b.start()
-b.display()
