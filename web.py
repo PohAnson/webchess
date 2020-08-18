@@ -34,7 +34,9 @@ def main():
 
     @app.route('/error',methods = ['POST'])
     def error():
-        ui.errmsg = 'ERROR VARIABLE'
+        #ui.errmsg = 'ERROR VARIABLE'
+        ui.errmsg = f'Invalid move for {board.turn} player:'
+        ui.next_link = '/play'
         return render_template('game.html', ui=ui)
 
     @app.route('/promote',methods = ['POST'])
