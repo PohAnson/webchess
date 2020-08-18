@@ -44,7 +44,7 @@ def main():
         ui.btnlabel = 'promote'
         return render_template('game.html', ui=ui)
     app.run('0.0.0.0', debug=False)
-    app.run()
+    # app.run(debug=True)
 
     @app.route('/validation')
     def validation():

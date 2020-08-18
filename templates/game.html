@@ -1,26 +1,81 @@
 <!DOCTYPE html>
 <head>
   <title>Chess Game</title>
-</head>
+  <style>
+    .chessboard {
+      width: 400px;
+      height: 400px;
+      margin: 0px;
+      text-align: centre;
+      margin-left: auto;
+      margin-right: auto;
+      border: 5px solid #fff;
+    }
+    .black {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background-color: #ffd9ea;
+      font-size: 30px;
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+      border: 0.1px solid #000000;
+    }
+    .white {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background-color: #fff;
+      font-size: 30px;
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+      border: 0.1px solid #000000;
+    }
+    .title {
+      text-align: center;
+      color: #000000;
+    }
 
-<body>
-  <div style="text-align: center;">
-    <table style="border: 2px solid; margin: auto;">
-      {% for row in ui.board %}
-      <tr>
-        {% for cell in row %}
-        <td style="align-content: center; size: 10px; border: 2px solid;">
-          {{ cell }}
-        </td>
+    .label {
+      float: left;
+      font-size: 30px;
+      display: table-cell;
+      text-align: center;
+    }
+    .corner {
+      width: 30px;
+      height: 30px;
+    }
+    .columnlabel {
+      width: 50px;
+      height: 30px;
+    }
+    .rowlabel {
+      width: 30px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body style="background-color: #ffd9ea;">
+    <div style="text-align: center;">
+      <table style="border: 2px solid #000000; margin:auto">
+        {% for row in ui.board %}
+        <tr>
+          {% for cell in row %}
+          <td class="{{ cell.type }}">
+            {{ cell.text }}
+          </td>
+          {% endfor %}
+        </tr>
         {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
-    <form action="{{ ui.next_link }}" method="POST">
-      <p>{{ ui.inputlabel }}:</p>
-      <input type="text" name="move" value="" />
-      <p>{{ ui.errmsg }}</p>
-      <input type="submit" value="{{ ui.btnlabel }}" />
-    </form>
-  </div>
+      </table>
+      <form action="{{ ui.next_link }}" method="POST">
+        <p>{{ ui.inputlabel }}:</p>
+        <input type="text" name="move" value="" />
+        <p>{{ ui.errmsg }}</p>
+        <input type="submit" value="{{ ui.btnlabel }}" />
+      </form>
+    </div>
 </body>

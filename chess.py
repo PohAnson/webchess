@@ -8,6 +8,17 @@ class WebInterface:
         self.wname = None
         self.bname = None
 
+class Cell:
+    number = 0
+    def __init__(self, text='', type=''):
+        self.text = text
+        if type != '':
+            self.type = type
+        else:
+            self.type = 'black' if (Cell.number%2 == 0) else 'white'
+        Cell.number += 1
+    def __repr__(self):
+        return str(self.text) + str(self.type)
 
 class MoveError(Exception):
     '''Custom error for invalid moves.'''
@@ -372,6 +383,7 @@ class Board:
         First letter is the colour (W for white, B for black).
         Second letter is the name (Starting letter for each piece).
         '''
+        Cell.number = 0
         if self.debug:
             print('== DEBUG MODE ON ==')
         # helper function to generate symbols for piece
@@ -384,22 +396,22 @@ class Board:
         # Row 7 is at the top, so print in reverse order
         row_list = []
         temp = []
-        temp.append(' ' * 4)
+        temp.append(Cell(type='label corner'))
         for i in range(8):
-            temp.append(f"{(' ' * 2)}{i}")
+            temp.append(Cell(i, 'label columnlabel'))
         row_list.append(temp)
 
         for row in range(7, -1, -1):
             temp = []
-            temp.append(f"{row:2}{' ' * 2}")
+            temp.append(Cell(row, 'label rowlabel'))
             for col in range(8):
                 coord = (col, row)  # tuple
                 if coord in self.coords():
                     piece = self.get_piece(coord)
-                    temp.append(f'{sym(piece)}')
+                    temp.append(Cell(sym(piece)))
                 else:
                     piece = None
-                    temp.append((' ' * 2))
+                    temp.append(Cell())
             row_list.append(temp)
             if self.checkmate is not None:
                 print(f'{self.checkmate} is checkmated!')
@@ -478,3 +490,7 @@ class Board:
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
+
+b = Board()
+b.start()
+b.display()
