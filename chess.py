@@ -11,15 +11,18 @@ class WebInterface:
 
 class Cell:
     number = 0
+
     def __init__(self, text='', type=''):
         self.text = text
         if type != '':
             self.type = type
         else:
-            self.type = 'black' if (Cell.number%2 == 0) else 'white'
+            self.type = 'black' if (Cell.number % 2 == 0) else 'white'
         Cell.number += 1
+
     def __repr__(self):
         return str(self.text) + str(self.type)
+
 
 class MoveError(Exception):
     '''Custom error for invalid moves.'''
@@ -302,7 +305,7 @@ class Board:
         if end[1] in (0, 7) and start_piece.name == 'pawn':
             if start_piece.isvalid(start, end, capture=True) or start_piece.isvalid(start, end, capture=False):
                 return 'promotion'
-            
+
         if end_piece is not None:
             if end_piece.colour != start_piece.colour:
                 return 'capture'
@@ -423,7 +426,7 @@ class Board:
                 print(f'{self.checkmate} is checkmated!')
         return row_list
 
-    def prompt(self, move, ui:WebInterface=WebInterface()):
+    def prompt(self, move, ui: WebInterface = WebInterface()):
         if self.debug:
             print('== PROMPT ==')
 
@@ -449,7 +452,7 @@ class Board:
             inputstr = move
             if not valid_format(inputstr):
                 ui.errmsg = ('Invalid move. Please enter your move in the '
-                      'following format: __ __, _ represents a digit.')
+                             'following format: __ __, _ represents a digit.')
                 return 'error'
             elif not valid_num(inputstr):
                 ui.errmsg = ('Invalid move. Move digits should be 0-7.')

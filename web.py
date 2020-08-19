@@ -15,7 +15,7 @@ def main():
 
     @app.route('/newgame', methods=['GET', 'POST'])
     def newgame():
-        ui.wname , ui.bname = request.form['wname'], request.form['bname']
+        ui.wname, ui.bname = request.form['wname'], request.form['bname']
         board.turn = 'black'
         return redirect('/play')
 
@@ -47,7 +47,7 @@ def main():
         ui.errmsg = None
         status = board.prompt(move, ui)
         if status == 'error':
-                return redirect('/error')
+            return redirect('/error')
         else:
             start, end = status
             if board.movetype(start, end) == 'promotion':
@@ -57,5 +57,6 @@ def main():
 
     # app.run('0.0.0.0', debug=False)
     app.run(debug=True)
+
 
 main()
