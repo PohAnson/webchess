@@ -420,7 +420,6 @@ class Board:
             row_list.append(temp)
             if self.checkmate is not None:
                 print(f'{self.checkmate} is checkmated!')
-        print("ROW LIST: \n\n", row_list)
         return row_list
 
     def prompt(self, move, ui:WebInterface=WebInterface()):
