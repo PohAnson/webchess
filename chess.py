@@ -1,12 +1,13 @@
 class WebInterface:
     def __init__(self):
-        self.inputlabel = None
-        self.btnlabel = None
-        self.errmsg = None
-        self.board = None
-        self.next_link = None
-        self.wname = None
-        self.bname = None
+        self.inputlabel = ''
+        self.btnlabel = 'Submit'
+        self.errmsg = ''
+        self.board = ''
+        self.next_link = ''
+        self.wname = 'White player'
+        self.bname = 'Black player'
+
 
 class Cell:
     number = 0
