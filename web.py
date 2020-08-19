@@ -55,8 +55,8 @@ def main():
             board.update(start, end)
             return redirect('/play')
 
-    # app.run('0.0.0.0', debug=False)
-    app.run(debug=True)
+    app.run('0.0.0.0', debug=False)
+    # app.run(debug=True)
 
 
 main()
