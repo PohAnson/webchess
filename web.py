@@ -10,26 +10,31 @@ def main():
 
     @app.route('/')
     def root():
+        ui.next_link = "/newgame"
         return render_template('homepage.html')
 
-    @app.route('/newgame')
+    @app.route('/newgame', methods=['GET', 'POST'])
     def newgame():
-        ui.players = {'white': request.args['wname'], 'black': request.args['bname']}
+        ui.wname, ui.bname = request.form['wname'], request.form['bname']
+        board.turn = 'black'
         return redirect('/play')
 
-    @app.route('/play')
+    @app.route('/play', methods=['GET', 'POST'])
     def play():
-        # TODO: if there is no player move, render the page template
         ui.board = board.display()
+        ui.errmsg = ''
+        board.next_turn()
+        ui.inputlabel = f'{board.turn} player:'
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
-    @app.route('/error')
+    @app.route('/error', methods=['GET', 'POST'])
     def error():
-        ui.errmsg = 'ERROR VARIABLE'
+        ui.errmsg = f'Invalid move for {board.turn} player:'
+        ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
-    @app.route('/promote')
+    @app.route('/promote', methods=['GET', 'POST'])
     def promote():
         ui.inputlabel = "Which piece do you want to promote? \nPromote pawn to r=Rook, k=Knight, b=Bishop, q=Queen: "
         ui.btnlabel = 'promote'
@@ -46,9 +51,9 @@ def main():
             ui.errmsg = 'Invalid letter given'
             return redirect('/promote')
 
-    @app.route('/validation')
+    @app.route('/validation', methods=['GET', 'POST'])
     def validation():
-        move = request.args['move']
+        move = request.form['move']
         ui.errmsg = None
         status = board.prompt(move, ui)
         if status == 'error':
@@ -60,7 +65,8 @@ def main():
             board.update(start, end)
             return redirect('/play')
 
-    # app.run('0.0.0.0', debug=False)
-    app.run(debug=True)
+    app.run('0.0.0.0', debug=False)
+    # app.run(debug=True)
+
 
 main()

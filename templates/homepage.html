@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <head>
   <title>ChessFlask</title>
-<style>
+  <style>
+    .hero-image {
+      background-image: url("https://www.tanglinclub.org.sg/images/Content/Sports_Recreation/Bridge/banner-chess.jpg");
+      background-color: #ffa4cb;
+      height: 1000px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
 
-.hero-image {
-  background-image: url("https://www.tanglinclub.org.sg/images/Content/Sports_Recreation/Bridge/banner-chess.jpg");
-  background-color: #FFA4CB;
-  height: 1000px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
-.hero-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
-</style>
+    .hero-text {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
+  </style>
 </head>
 <body>
-
-<div class="hero-image">
-  <div class="hero-text">
-    <h1 style="font-size:50px">Welcome to ChessFlask!</h1>
-    <form action="/newgame" method="get">
-    <p>White player: <input type="text" name="wname" value="" /><br /></p>
-    <p>Black player: <input type="text" name="bname" value="" /><br /></p>
-    <input type="submit" value="Start new game" />
-  </form>
+  <div class="hero-image">
+    <div class="hero-text">
+      <h1 style="font-size: 50px;">Welcome to ChessFlask!</h1>
+      <form action="/newgame" method="post">
+        <p>White player: <input type="text" name="wname" value="" /><br /></p>
+        <p>Black player: <input type="text" name="bname" value="" /><br /></p>
+        <input type="submit" value="Start new game" />
+      </form>
+    </div>
   </div>
-</div>
-
 </body>
