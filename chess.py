@@ -46,6 +46,8 @@ class BasePiece:
             return f'{self.colour} {self.name}'
         except NameError:
             return f'{self.colour} piece'
+    def symbol(self):
+        return f'{self.sym1[self.colour]}'
 
     @staticmethod
     def vector(start, end):
@@ -57,6 +59,7 @@ class BasePiece:
 
 class King(BasePiece):
     name = 'king'
+    sym1 = {'white': '♔', 'black': '♚'}
 
     def __repr__(self):
         return f'King({repr(self.colour)})'
@@ -69,6 +72,7 @@ class King(BasePiece):
 
 class Queen(BasePiece):
     name = 'queen'
+    sym1 = {'white': '♕', 'black': '♛'}
 
     def __repr__(self):
         return f'Queen({repr(self.colour)})'
@@ -85,6 +89,7 @@ class Queen(BasePiece):
 
 class Bishop(BasePiece):
     name = 'bishop'
+    sym1 = {'white': '♗', 'black': '♝'}
 
     def __repr__(self):
         return f'Bishop({repr(self.colour)})'
@@ -99,6 +104,7 @@ class Bishop(BasePiece):
 
 class Knight(BasePiece):
     name = 'knight'
+    sym1 = {'white': '♘', 'black': '♞'}
 
     def __repr__(self):
         return f'Knight({repr(self.colour)})'
@@ -113,6 +119,7 @@ class Knight(BasePiece):
 
 class Rook(BasePiece):
     name = 'rook'
+    sym1 = {'white': '♖', 'black': '♜'}
 
     def __repr__(self):
         return f'Rook({repr(self.colour)})'
@@ -140,6 +147,7 @@ class Rook(BasePiece):
 
 class Pawn(BasePiece):
     name = 'pawn'
+    sym1 = {'white': '♙', 'black': '♟︎'}
 
     def __repr__(self):
         return f'Pawn({repr(self.colour)})'
@@ -152,6 +160,7 @@ class Pawn(BasePiece):
                     or self.colour == 'white' and y == 1:
                 return True
         return False
+
 
 
 class Board:
@@ -380,7 +389,7 @@ class Board:
         for x in range(0, 8):
             self.add((x, 1), Pawn(colour))
 
-        self.turn = 'white'
+        self.turn = 'black'
 
         for piece in self.pieces():
             piece.notmoved = True
@@ -417,7 +426,7 @@ class Board:
                 coord = (col, row)  # tuple
                 if coord in self.coords():
                     piece = self.get_piece(coord)
-                    temp.append(Cell(sym(piece)))
+                    temp.append(Cell(piece.symbol()))
                 else:
                     piece = None
                     temp.append(Cell())
