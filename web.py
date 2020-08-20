@@ -19,9 +19,9 @@ def main():
         ui.errmsg = ''
         board.next_turn()
         if board.turn == 'white':
-            ui.inputlabel = f'{ui.wname} player:'
+            ui.inputlabel = f'{ui.wname}\'s turn:'
         else:
-            ui.inputlabel = f'{ui.bname} player:'
+            ui.inputlabel = f'{ui.bname}\'s turn:'
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
@@ -34,7 +34,7 @@ def main():
     @app.route('/promote', methods=['POST', 'GET'])
     def promote():
         ui.inputlabel = "Which piece do you want to promote?"
-        ui.btnlabel = 'promote'
+        ui.btnlabel = 'Promote'
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
