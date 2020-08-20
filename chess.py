@@ -237,15 +237,13 @@ class Board:
                 return True
         return False
 
-    def promotepawns(self, PieceClass=None):
+    def promotepawns(self, PieceClass):
         for coord in self.coords():
             row = coord[1]
             piece = self.get_piece(coord)
             for opprow, colour in zip([0, 7], ['black', 'white']):
                 if row == opprow and piece.name == 'pawn' \
                         and piece.colour == colour:
-                    if PieceClass is None:
-                        PieceClass = self.promoteprompt()
                     promoted_piece = PieceClass(colour)
                     self.remove(coord)
                     self.add(coord, promoted_piece)
@@ -325,12 +323,9 @@ class Board:
         return True
 
     @classmethod
-    def promoteprompt(cls):
-        choice = input(f'Promote pawn to '
-                       '(r=Rook, k=Knight, b=Bishop, '
-                       'q=Queen): ').lower()
+    def promoteprompt(cls, choice):
         if choice not in 'rkbq':
-            return cls.promoteprompt()
+            return False
         elif choice == 'r':
             return Rook
         elif choice == 'k':

@@ -31,10 +31,20 @@ def main():
 
     @app.route('/promote')
     def promote():
-        ui.inputlabel = "Which piece do you want to promote?"
+        ui.inputlabel = "Which piece do you want to promote? \nPromote pawn to r=Rook, k=Knight, b=Bishop, q=Queen: "
         ui.btnlabel = 'promote'
-        ui.next_link = '/validation'
+        ui.next_link = '/promote_validation'
         return render_template('game.html', ui=ui)
+    
+    @app.route('/promote_validation')
+    def promote_validation():
+        piece = request.args['move'].lower()
+        if board.promoteprompt(piece):
+            board.promotepawns(piece)
+            return redirect('/play')
+        else:
+            ui.errmsg = 'Invalid letter given'
+            return redirect('/promote')
 
     @app.route('/validation')
     def validation():
