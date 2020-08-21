@@ -64,6 +64,10 @@ def main():
     def undo():
         pass
 
+    @app.route('/testwinner',methods=['POST','GET'])
+    def winner():
+        return render_template('winner.html', ui=ui)
+
     app.run('0.0.0.0', debug=False)
     # app.run(debug=True)
 
