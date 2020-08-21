@@ -11,11 +11,18 @@ def main():
 
     @app.route('/')
     def root():
-        return render_template('homepage.html')
+        ui.next_link = '/newgame'
+        return render_template('homepage.html', ui=ui)
+
+    @app.route('/newgame', methods=['GET', 'POST'])
+    def newgame():
+        ui.wname, ui.bname = request.form['wname'], request.form['bname']
+        board.turn = 'black'
+        return redirect('/play')
 
     @app.route('/play', methods=['POST', 'GET'])
     def play():
-        ui.wname, ui.bname = request.form['wname'], request.form['bname']
+        # ui.wname, ui.bname = request.form['wname'], request.form['bname']
         ui.board = board.display()
         ui.errmsg = ''
         board.next_turn()
@@ -59,5 +66,6 @@ def main():
 
     app.run('0.0.0.0', debug=False)
     # app.run(debug=True)
+
 
 main()
