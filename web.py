@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from chess import Board, WebInterface
+from chess import Board, WebInterface, MoveHistory
 
 
 def main():
@@ -7,6 +7,7 @@ def main():
     ui = WebInterface()
     board = Board()
     board.start()
+    movehistory = MoveHistory(10)
 
     @app.route('/')
     def root():
@@ -65,8 +66,12 @@ def main():
     def winner():
         return f'{ui.winner} is the winner!'
 
-    # app.run('0.0.0.0', debug=False)
-    app.run(debug=True)
+    @app.route('/undo',methods=['POST','GET'])
+    def undo():
+        pass
+
+    app.run('0.0.0.0', debug=False)
+    # app.run(debug=True)
 
 
 main()

@@ -9,6 +9,34 @@ class WebInterface:
         self.bname = 'Black player'
         self.winner = None
 
+class MoveHistory:
+    '''MoveHistory works like a CircularStack'''
+    def __init__(self, size):
+        # Remember to validate input
+        self.size = size
+        self.__data = [None] * size
+        self.head = None
+    
+    def push(self, move):
+        if self.head is None:
+            self.head = 0
+        else:
+            self.head = (self.head + 1) % self.size
+        self.__data[self.head] = move
+            
+    def pop(self):
+        # Remember to check if MoveHistory is empty
+        if self.head != None:
+            move = self.__data[self.head]
+            self.__data[self.head] = None
+            if self.head == 0:       #????????????
+                self.head = self.size - 1 
+            else:
+                self.head -= 1
+            return move
+        else:
+            return 'no more undo move'
+
 
 class Cell:
     number = 0
@@ -29,6 +57,21 @@ class MoveError(Exception):
     '''Custom error for invalid moves.'''
     pass
 
+def vector(start, end):
+    '''
+    Return three values as a tuple:
+    - x, the number of spaces moved horizontally,
+    - y, the number of spaces moved vertically,
+    - dist, the total number of spaces moved.
+    
+    positive integers indicate upward or rightward direction,
+    negative integers indicate downward or leftward direction.
+    dist is always positive.
+    '''
+    x = end[0] - start[0]
+    y = end[1] - start[1]
+    dist = abs(x) + abs(y)
+    return x, y, dist
 
 class BasePiece:
     def __init__(self, colour):
@@ -38,6 +81,7 @@ class BasePiece:
             raise ValueError('colour must be {white,black}')
         else:
             self.colour = colour
+            self.moved = 0
 
     def __repr__(self):
         return f'BasePiece({repr(self.colour)})'
@@ -153,15 +197,21 @@ class Pawn(BasePiece):
     def __repr__(self):
         return f'Pawn({repr(self.colour)})'
 
-    def isvalid(self, start: tuple, end: tuple, **kwargs):
-        x, y, dist = self.vector(start, end)
-        xmove = 1 if kwargs.get('capture', False) else 0
-        if x == xmove:
-            if self.colour == 'black' and y == -1 \
-                    or self.colour == 'white' and y == 1:
-                return True
+    def isvalid(self, start: tuple, end: tuple):
+        '''Pawn can only move 1 step forward.'''
+        x, y, dist = vector(start, end)
+        if x == 0:
+            if self.colour == 'black':
+                if self.moved:
+                    return (y == -1)
+                else:
+                    return (0 > y >= -2)
+            elif self.colour == 'white':
+                if self.moved:
+                    return (y == 1)
+                else:
+                    return (0 < y <= 2)
         return False
-
 
 
 class Board:
