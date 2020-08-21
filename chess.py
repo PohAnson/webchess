@@ -560,8 +560,6 @@ class Board:
             self.winner = 'white'
 
     def checkmate_checking(self):
-        print('CHECKMATE DEBUG!!')
-        # print(self.pieces())
         king_list = []
         for piece in self.pieces():
             if piece.name == 'king':
