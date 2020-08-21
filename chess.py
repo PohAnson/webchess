@@ -7,6 +7,7 @@ class WebInterface:
         self.next_link = ''
         self.wname = 'White player'
         self.bname = 'Black player'
+        self.winner = None
 
 
 class Cell:
@@ -507,6 +508,18 @@ class Board:
             self.winner = 'black'
         elif not self.alive('black', 'king'):
             self.winner = 'white'
+
+    def checkmate_checking(self):
+        print('CHECKMATE DEBUG!!')
+        # print(self.pieces())
+        king_list = []
+        for piece in self.pieces():
+            if piece.name == 'king':
+                king_list.append(piece)
+        if len(king_list) == 1:
+            return True
+        else:
+            return False
 
     def next_turn(self):
         if self.debug:

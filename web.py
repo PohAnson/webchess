@@ -57,7 +57,13 @@ def main():
             if board.movetype(start, end) == 'promotion':
                 return redirect('/promotion')
             board.update(start, end)
+            if board.checkmate_checking():
+                ui.winner=board.turn
+                return redirect('/winner')
             return redirect('/play')
+    @app.route('/winner')
+    def winner():
+        return f'{ui.winner} is the winner!'
 
     # app.run('0.0.0.0', debug=False)
     app.run(debug=True)
