@@ -58,10 +58,11 @@ def main():
             start,end = status
             if board.movetype(start,end) == 'promotion':
                 return redirect('/promotion')
-            board.update(start ,end)
-            move = (start,end)
-            history.push(move)
-            return redirect('/play')
+
+            board.update(start, end)
+            if board.checkmate_checking():
+                ui.winner=board.turn
+                return redirect('/winner')
 
     @app.route('/undo',methods=['POST','GET'])
     def undo():

@@ -5,8 +5,9 @@ class WebInterface:
         self.errmsg = ''
         self.board = ''
         self.next_link = ''
-        self.wname = ''
-        self.bname = ''
+        self.wname = 'White player'
+        self.bname = 'Black player'
+        self.winner = None
 
 class Cell:
     number = 0
@@ -27,6 +28,21 @@ class MoveError(Exception):
     '''Custom error for invalid moves.'''
     pass
 
+def vector(start, end):
+    '''
+    Return three values as a tuple:
+    - x, the number of spaces moved horizontally,
+    - y, the number of spaces moved vertically,
+    - dist, the total number of spaces moved.
+    
+    positive integers indicate upward or rightward direction,
+    negative integers indicate downward or leftward direction.
+    dist is always positive.
+    '''
+    x = end[0] - start[0]
+    y = end[1] - start[1]
+    dist = abs(x) + abs(y)
+    return x, y, dist
 
 class BasePiece:
     def __init__(self, colour):
@@ -36,6 +52,7 @@ class BasePiece:
             raise ValueError('colour must be {white,black}')
         else:
             self.colour = colour
+            self.moved = 0
 
     def __repr__(self):
         return f'BasePiece({repr(self.colour)})'
@@ -151,15 +168,21 @@ class Pawn(BasePiece):
     def __repr__(self):
         return f'Pawn({repr(self.colour)})'
 
-    def isvalid(self, start: tuple, end: tuple, **kwargs):
-        x, y, dist = self.vector(start, end)
-        xmove = 1 if kwargs.get('capture', False) else 0
-        if x == xmove:
-            if self.colour == 'black' and y == -1 \
-                    or self.colour == 'white' and y == 1:
-                return True
+    def isvalid(self, start: tuple, end: tuple):
+        '''Pawn can only move 1 step forward.'''
+        x, y, dist = vector(start, end)
+        if x == 0:
+            if self.colour == 'black':
+                if self.moved:
+                    return (y == -1)
+                else:
+                    return (0 > y >= -2)
+            elif self.colour == 'white':
+                if self.moved:
+                    return (y == 1)
+                else:
+                    return (0 < y <= 2)
         return False
-
 
 
 class Board:
@@ -507,6 +530,16 @@ class Board:
             self.winner = 'black'
         elif not self.alive('black', 'king'):
             self.winner = 'white'
+
+    def checkmate_checking(self):
+        king_list = []
+        for piece in self.pieces():
+            if piece.name == 'king':
+                king_list.append(piece)
+        if len(king_list) == 1:
+            return True
+        else:
+            return False
 
     def next_turn(self):
         if self.debug:
