@@ -22,7 +22,6 @@ def main():
 
     @app.route('/play', methods=['POST', 'GET'])
     def play():
-        # ui.wname, ui.bname = request.form['wname'], request.form['bname']
         ui.board = board.display()
         ui.errmsg = ''
         board.next_turn()
@@ -58,14 +57,14 @@ def main():
             if board.movetype(start, end) == 'promotion':
                 return redirect('/promotion')
             board.update(start, end)
-            if board.checkmate_checking():
+            opponent_colour = 'black' if board.turn == 'white' else 'white'
+            if board.checkmate_checking(opponent_colour):
                 ui.winner=board.turn
                 return redirect('/winner')
             return redirect('/play')
     @app.route('/winner')
     def winner():
         return render_template('winner.html',ui=ui)
-        #return f'{ui.winner} is the winner!'
 
 
     @app.route('/undo',methods=['POST','GET'])
