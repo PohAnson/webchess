@@ -9,35 +9,6 @@ class WebInterface:
         self.bname = 'Black player'
         self.winner = None
 
-class MoveHistory:
-    '''MoveHistory works like a CircularStack'''
-    def __init__(self, size):
-        # Remember to validate input
-        self.size = size
-        self.__data = [None] * size
-        self.head = None
-    
-    def push(self, move):
-        if self.head is None:
-            self.head = 0
-        else:
-            self.head = (self.head + 1) % self.size
-        self.__data[self.head] = move
-            
-    def pop(self):
-        # Remember to check if MoveHistory is empty
-        if self.head != None:
-            move = self.__data[self.head]
-            self.__data[self.head] = None
-            if self.head == 0:       #????????????
-                self.head = self.size - 1 
-            else:
-                self.head -= 1
-            return move
-        else:
-            return 'no more undo move'
-
-
 class Cell:
     number = 0
 
@@ -334,7 +305,7 @@ class Board:
                 return False
         return True
 
-    def movetype(self, start, end):
+    def movetype(self, start ,end):
         '''
         Determines the type of board move by:
         1. Checking if the player is moving a piece of their
@@ -440,7 +411,7 @@ class Board:
         for x in range(0, 8):
             self.add((x, 1), Pawn(colour))
 
-        self.turn = 'black'
+        self.turn = 'white'
 
         for piece in self.pieces():
             piece.notmoved = True
@@ -525,11 +496,12 @@ class Board:
                 else:
                     return start, end
 
-    def update(self, start, end, promote_piece=None):
+    def update(self, start ,end , promote_piece=None):
         '''
         Update board according to requested move.
         If an opponent piece is at end, capture it.
         '''
+
         if self.debug:
             print('== UPDATE ==')
         movetype = self.movetype(start, end)
@@ -576,3 +548,9 @@ class Board:
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
+
+    def undo(self,move):
+        end ,start = move
+        piece = self.get_piece(start)
+        self.remove(start)
+        self.add(end,piece)

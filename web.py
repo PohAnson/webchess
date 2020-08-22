@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from chess import Board, WebInterface, MoveHistory
+from chess import Board, WebInterface
+from movehistory import MoveHistory
 
 
 def main():
@@ -7,7 +8,7 @@ def main():
     ui = WebInterface()
     board = Board()
     board.start()
-    movehistory = MoveHistory(10)
+    history = MoveHistory(10)
 
     @app.route('/')
     def root():
@@ -54,23 +55,20 @@ def main():
         if status == 'error':
             return redirect('/error')
         else:
-            start, end = status
-            if board.movetype(start, end) == 'promotion':
+            start,end = status
+            if board.movetype(start,end) == 'promotion':
                 return redirect('/promotion')
+
             board.update(start, end)
             if board.checkmate_checking():
                 ui.winner=board.turn
                 return redirect('/winner')
-            return redirect('/play')
-    @app.route('/winner')
-    def winner():
-        return render_template('winner.html',ui=ui)
-        #return f'{ui.winner} is the winner!'
-
 
     @app.route('/undo',methods=['POST','GET'])
     def undo():
-        pass
+        move = history.pop()
+        board.undo(move)
+        return redirect('/play')
 
     app.run('0.0.0.0', debug=False)
     # app.run(debug=True)
