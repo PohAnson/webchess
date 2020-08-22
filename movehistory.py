@@ -14,14 +14,13 @@ class MoveHistory:
         self.__data[self.head] = move
             
     def pop(self):
-        # Remember to check if MoveHistory is empty
         if self.head != None:
             move = self.__data[self.head]
             self.__data[self.head] = None
-            if self.head == 0:       #????????????
-                self.head = self.size - 1 
+            if self.head == 0:       
+                self.head = None
             else:
                 self.head -= 1
             return move
         else:
-            return 'no more undo move'
+            return None

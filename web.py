@@ -19,14 +19,15 @@ def main():
     def newgame():
         ui.wname, ui.bname = request.form['wname'], request.form['bname']
         board.turn = 'black'
+        ui.errmsg = ''
         return redirect('/play')
 
     @app.route('/play', methods=['POST', 'GET'])
     def play():
-        # ui.wname, ui.bname = request.form['wname'], request.form['bname']
         ui.board = board.display()
-        ui.errmsg = ''
         board.next_turn()
+        if ui.errmsg == None:
+            ui.errmsg = ''
         if board.turn == 'white':
             ui.inputlabel = f'{ui.wname}\'s turn:'
         else:
@@ -56,18 +57,29 @@ def main():
             return redirect('/error')
         else:
             start,end = status
-            if board.movetype(start,end) == 'promotion':
-                return redirect('/promotion')
-
-            board.update(start, end)
             if board.checkmate_checking():
                 ui.winner=board.turn
                 return redirect('/winner')
 
+            if board.movetype(start,end) == 'promotion':
+                return redirect('/promotion')
+
+            move = (start,end)
+            board.update(start, end)
+            print(f'move in validation:{move}')
+            history.push(move)
+            return redirect('/play')
+
+            
     @app.route('/undo',methods=['POST','GET'])
     def undo():
         move = history.pop()
-        board.undo(move)
+        if move == None:
+            ui.errmsg = 'No more undo move'
+            board.next_turn()
+            return redirect('/play')
+        else:    
+            board.undo(move)
         return redirect('/play')
 
     app.run('0.0.0.0', debug=False)

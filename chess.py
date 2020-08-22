@@ -554,3 +554,4 @@ class Board:
         piece = self.get_piece(start)
         self.remove(start)
         self.add(end,piece)
+            
