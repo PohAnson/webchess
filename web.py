@@ -70,6 +70,11 @@ def main():
             history.push(move)
             return redirect('/play')
 
+    @app.route('/winner')
+    def winner():
+        return render_template('winner.html',ui=ui)
+        #return f'{ui.winner} is the winner!'
+
             
     @app.route('/undo',methods=['POST','GET'])
     def undo():
