@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from chess import Board, WebInterface, MoveHistory
+from chess import Board, WebInterface
+from movehistory import MoveHistory
 
 
 def main():
@@ -7,7 +8,7 @@ def main():
     ui = WebInterface()
     board = Board()
     board.start()
-    movehistory = MoveHistory(10)
+    history = MoveHistory(10)
 
     @app.route('/')
     def root():
@@ -18,13 +19,15 @@ def main():
     def newgame():
         ui.wname, ui.bname = request.form['wname'], request.form['bname']
         board.turn = 'black'
+        ui.errmsg = ''
         return redirect('/play')
 
     @app.route('/play', methods=['POST', 'GET'])
     def play():
         ui.board = board.display()
-        ui.errmsg = ''
         board.next_turn()
+        if ui.errmsg == None:
+            ui.errmsg = ''
         if board.turn == 'white':
             ui.inputlabel = f'{ui.wname}\'s turn:'
         else:
@@ -53,6 +56,7 @@ def main():
         if status == 'error':
             return redirect('/error')
         else:
+
             start, end = status
             if board.movetype(start, end) == 'promotion':
                 return redirect('/promotion')
@@ -61,15 +65,31 @@ def main():
             if board.checkmate_checking(opponent_colour):
                 ui.winner=board.turn
                 return redirect('/winner')
+
+            if board.movetype(start,end) == 'promotion':
+                return redirect('/promotion')
+
+            move = (start,end)
+            board.update(start, end)
+            print(f'move in validation:{move}')
+            history.push(move)
             return redirect('/play')
+
     @app.route('/winner')
     def winner():
         return render_template('winner.html',ui=ui)
 
-
+            
     @app.route('/undo',methods=['POST','GET'])
     def undo():
-        pass
+        move = history.pop()
+        if move == None:
+            ui.errmsg = 'No more undo move'
+            board.next_turn()
+            return redirect('/play')
+        else:    
+            board.undo(move)
+        return redirect('/play')
 
     app.run('0.0.0.0', debug=False)
     # app.run(debug=True)
