@@ -8,13 +8,13 @@ def main():
 
 #   import 
 
-#   os.system('python web.py &')
+  os.system('python web.py &')
 #   os.popen('python web.py')
 
   time.sleep(1)
   print('\n\npaste the link near the place with open new tab')
   print('e.g. https://webchess-1.pohanson.repl.co')
-  url = 'http://127.0.0.1:5000/'#input('Url of web: ')
+  url = input('Url of web: ')
 
   chrome_options = Options()
   chrome_options.add_argument('--no-sandbox')

@@ -37,7 +37,8 @@ def main():
 
     @app.route('/error', methods=['POST', 'GET'])
     def error():
-        ui.errmsg = f'Invalid move for {board.turn} player:'
+        
+        ui.errmsg = f'Invalid move for {board.turn} player'
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
@@ -70,8 +71,6 @@ def main():
                 return redirect('/promotion')
 
             move = (start,end)
-            board.update(start, end)
-            print(f'move in validation:{move}')
             history.push(move)
             return redirect('/play')
 
