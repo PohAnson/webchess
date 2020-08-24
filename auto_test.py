@@ -4,53 +4,50 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
 
+
 def main():
+    os.system('python web.py &')
+    #   os.popen('python web.py')
 
-#   import 
+    time.sleep(2)
+    print('\n\npaste the link near the place with open new tab')
+    print('e.g. https://webchess-1.pohanson.repl.co')
+    url = input('Url of web: ')
 
-  os.system('python web.py &')
-#   os.popen('python web.py')
+    chrome_options = Options()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
 
-  time.sleep(1)
-  print('\n\npaste the link near the place with open new tab')
-  print('e.g. https://webchess-1.pohanson.repl.co')
-  url = input('Url of web: ')
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.implicitly_wait(15)
+    driver.get(url)
 
-  chrome_options = Options()
-  chrome_options.add_argument('--no-sandbox')
-  chrome_options.add_argument('--disable-dev-shm-usage')
+    print(driver.title)
+    driver.find_element_by_xpath("//form//input[@type='submit']").click()
 
-  driver = webdriver.Chrome(options=chrome_options)
-  driver.implicitly_wait(15)
-  driver.get(url)
-  
-  print(driver.title)
-  driver.find_element_by_xpath("//form//input[@type='submit']").click()
-
-  def move(moves:list):
-      """
+    def move(moves: list):
+        """
       give the list moves as a string like how you would input it
       
       e.g. ['51 52', '46 45', '11 12']
       """
-      for move in moves:
-          move_box = driver.find_element_by_name('move')
-          print(move)
-          move_box.send_keys(move)
-          move_box.submit()
-          time.sleep(1.5)
+        for move in moves:
+            move_box = driver.find_element_by_name('move')
+            print(move)
+            move_box.send_keys(move)
+            move_box.submit()
+            time.sleep(1.5)
 
-  def fool_mate():
-    move(['51 52', '46 45', '61 63', '37 73'])
-    # move(['51 52', '46 45', '11 12', '37 73', '12 13', '73 40'])
+    def fool_mate():
+        move(['51 52', '46 45', '61 63', '37 73'])
 
-  # replace the 'Winner' with whatever text on the screen
-    if 'Winner' in driver.page_source:
-        print("\n===SUCCESS!!===")
-    else:
-        print('\n===FAIL!!===')
+    def promotion():
+        move([
+            '01 03', '16 14', '03 14', '17 25', '14 15', '06 05', '15 16', '05 04', '16 17'])
 
-  fool_mate()
+    # fool_mate()
+    promotion()
+
 
 main()
-time.sleep(120)
+time.sleep(300)

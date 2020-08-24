@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from chess import Board, WebInterface
 from movehistory import MoveHistory
-
+import time
 
 def main():
     app = Flask(__name__)
@@ -42,12 +42,35 @@ def main():
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
-    @app.route('/promote', methods=['POST', 'GET'])
-    def promote():
-        ui.inputlabel = "Which piece do you want to promote?"
-        ui.btnlabel = 'Promote'
-        ui.next_link = '/validation'
-        return render_template('game.html', ui=ui)
+    @app.route('/promotion', methods=['POST', 'GET'])
+    def promotion():
+            # /promote path must always have coord in GET parameter so that
+        # board knows where the pawn to be promoted is
+        print("promotion page")
+        coord = request.args['coord']
+        print('processed digits', coord)
+        # coord = (digits[0], digits[1])
+        # Process pawn promotion
+        # Player will be prompted for another input if invalid
+        if request.method == 'POST':
+            print('USING POST')
+            char = request.form['move'].lower()
+            if char in 'rkbq':
+                board.promote_pawn(coord,
+                                char,
+                                push_to=history.this_move(),
+                                )
+                return redirect('/play')
+            else:
+                ui.errmsg = 'Invalid input (r, k, b, or q only). Please try again.'
+                return redirect('/promotion', coord=coord)
+        else:
+            print('USING', request.method)
+            ui.board = board.display()
+            ui.inputlabel = f'Promote pawn at {coord} to (r, k, b, q): '
+            ui.btnlabel = 'Promote'
+            ui.next_link = '/promotion'
+            return render_template('game.html', ui=ui)
 
     @app.route('/validation', methods=['POST', 'GET'])
     def validation():
@@ -60,15 +83,12 @@ def main():
 
             start, end = status
             if board.movetype(start, end) == 'promotion':
-                return redirect('/promotion')
+                return redirect(f'/promotion?coord={start}')
             board.update(start, end)
             opponent_colour = 'black' if board.turn == 'white' else 'white'
             if board.checkmate_checking(opponent_colour):
                 ui.winner=board.turn
                 return redirect('/winner')
-
-            if board.movetype(start,end) == 'promotion':
-                return redirect('/promotion')
 
             move = (start,end)
             history.push(move)
@@ -92,7 +112,7 @@ def main():
         ui.errmsg = ''
         return redirect('/play')
 
-    app.run('0.0.0.0', debug=False)
+    app.run('0.0.0.0', debug=True)
     # app.run(debug=True)
 
 
