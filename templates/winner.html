@@ -1,18 +1,3 @@
-<!-- <!DOCTYPE html>
-<head>
-    <title>
-        Winner!
-    </title>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script src="..\[static]\[script.js].js"></script>
-</head>
-
-<body>
-    <h1 style="font-size: 50px;">Winner!</h1>
-    <div class="wrapper">
-    </div>
-    <script src="script.js"></script>
-</body>  -->
 
 <!DOCTYPE html>
 <html>
@@ -22,6 +7,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
+
+<style>
+    .wrapper{
+    position: relative;
+    min-height: 100vh;
+    }
+
+    [class |= "confetti"]{
+    position: absolute;
+    }
+
+    .red {
+    background-color: #dc2626;
+    }
+
+    .yellow {
+    background-color: #ffbf00;
+    }
+
+    .blue {
+    background-color: #6eaff3;
+    }
+    </style>
+    
+
     <script>
     $(function () {
       $('body').append('Winner!');
