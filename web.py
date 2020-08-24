@@ -37,7 +37,12 @@ def main():
 
     @app.route('/error', methods=['POST', 'GET'])
     def error():
+<<<<<<< HEAD
         ui.errmsg = f'Invalid move for {board.turn} player'
+=======
+        player = ui.wname if board.turn == "white" else ui.bname
+        ui.errmsg = f'Invalid move for {player}'
+>>>>>>> origin/master
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
