@@ -545,12 +545,12 @@ class Board:
         3. see if it will now result in check, if it does not, it will not checkmate
         """
         # base check to make sure that at least when the king is eaten, it will end.
-        # king_list = []
-        # for piece in self.pieces():
-        #     if piece.name == 'king':
-        #         king_list.append(piece)
-        # if len(king_list) == 1:
-        #     return True
+        king_list = []
+        for piece in self.pieces():
+            if piece.name == 'king':
+                king_list.append(piece)
+        if len(king_list) == 1:
+            return True
 
         own_king_coord = self.get_coords(colour, 'king')[0]
 
