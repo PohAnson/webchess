@@ -463,6 +463,8 @@ class Board:
             print(f' captures {self.get_piece(end)}')
         elif kwargs.get('castling', False):
             print(f' (castling)')
+        elif kwargs.get(' promotion', False):
+            print('promotion')
         else:
             print('')
 
@@ -765,14 +767,14 @@ class Board:
             self.printmove(start, end)
             self.move(start, end)
         elif movetype == 'promotion':
-            self.printmove(start, end)
+            self.printmove(start, end, promotion=True)
             self.move(start, end)
-            self.promotepawns(promote_piece)
-            assert False, 'NOT SURE IF WORKS!'
+            # self.promotepawns(promote_piece)
+            # assert False, 'NOT SURE IF WORKS!'
         else:
             raise MoveError('Unknown error, please report '
                             f'(movetype={repr(movetype)}).')
-        self.promotepawns()
+        # self.promotepawns()
         if not self.alive('white', 'king'):
             self.winner = 'black'
         elif not self.alive('black', 'king'):
