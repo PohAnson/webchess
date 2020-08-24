@@ -89,6 +89,7 @@ def main():
             return redirect('/play')
         else:    
             board.undo(move)
+        ui.errmsg = ''
         return redirect('/play')
 
     app.run('0.0.0.0', debug=False)
