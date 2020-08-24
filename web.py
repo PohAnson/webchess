@@ -37,17 +37,36 @@ def main():
 
     @app.route('/error', methods=['POST', 'GET'])
     def error():
-        
         ui.errmsg = f'Invalid move for {board.turn} player'
         ui.next_link = '/validation'
         return render_template('game.html', ui=ui)
 
-    @app.route('/promote', methods=['POST', 'GET'])
-    def promote():
-        ui.inputlabel = "Which piece do you want to promote?"
-        ui.btnlabel = 'Promote'
-        ui.next_link = '/validation'
-        return render_template('game.html', ui=ui)
+    @app.route('/promotion', methods=['POST', 'GET'])
+    def promotion():
+            # /promote path must always have coord in GET parameter so that
+        # board knows where the pawn to be promoted is
+        print("promotion page")
+        digits = request.args['coord']
+        coord = (digits[0], digits[1])
+        # Process pawn promotion
+        # Player will be prompted for another input if invalid
+        if request.method == 'POST':
+            char = request.form['move'].lower()
+            if char in 'rkbq':
+                board.promote_pawn(coord,
+                                char,
+                                push_to=history.this_move(),
+                                )
+                return redirect('/play')
+            else:
+                ui.errmsg = 'Invalid input (r, k, b, or q only). Please try again.'
+                return redirect('/promotion', coord=digits)
+        else:
+            ui.board = board.as_str()
+            ui.inputlabel = f'Promote pawn at {coord} to (r, k, b, q): '
+            ui.btnlabel = 'Promote'
+            ui.next_link = '/play'
+            return render_template('game.html', ui=ui)
 
     @app.route('/validation', methods=['POST', 'GET'])
     def validation():
@@ -89,6 +108,7 @@ def main():
             return redirect('/play')
         else:    
             board.undo(move)
+        ui.errmsg = ''
         return redirect('/play')
 
     app.run('0.0.0.0', debug=False)

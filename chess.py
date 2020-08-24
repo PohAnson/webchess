@@ -715,6 +715,34 @@ class Board:
                 else:
                     return start, end
 
+    def pawns_to_promote(self, colour):
+            '''Returns the first coord of any pawn to be promoted'''
+            if colour == 'white':
+                enemy_home = 7
+            elif colour == 'black':
+                enemy_home = 0
+            else:
+                raise ValueError("colour must be {'white', 'black'}")
+            for coord in self.get_coords(colour, 'pawn'):
+                col, row = coord
+                if row == enemy_home:
+                    # TODO: replace with raise PromptPromotionPiece
+                    # with 'msg' argument and 'prompt' kwarg
+                    return coord
+            return None
+
+    def promote_pawn(self, coord, char, **kwargs):
+        piece_dict = {'r': Rook,
+                     'k': Knight,
+                     'b': Bishop,
+                     'q': Queen,
+                     }
+        # Transfer old_piece move attributes to new_piece
+        old_piece = self.get_piece(coord)
+        new_piece = piece_dict[char.lower()](old_piece.colour)
+        new_piece.moved = old_piece.moved
+        self.add(coord, new_piece, push_to=kwargs.get('push_to'))
+
     def update(self, start ,end , promote_piece=None):
         '''
         Update board according to requested move.
@@ -764,3 +792,20 @@ class Board:
         self.remove(start)
         self.add(end,piece)
             
+    def as_str(self):
+        '''
+        Returns the contents of the board
+        as a linebreak-delimited string.
+        '''
+        output = []
+        # Row 7 is at the top, so print in reverse order
+        for row in range(7, -1, -1):
+            line = []
+            for col in range(8):
+                coord = (col, row)  # tuple
+                if coord in self.coords():
+                    line.append(f'{self.get_piece(coord).symbol()}')
+                else:
+                    line.append(' ')
+            output.append(line)
+        return output
