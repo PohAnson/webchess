@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from chess import Board, WebInterface
 from movehistory import MoveHistory
 import time
+import re
 
 def main():
     app = Flask(__name__)
@@ -33,28 +34,31 @@ def main():
         else:
             ui.inputlabel = f'{ui.bname}\'s turn:'
         ui.next_link = '/validation'
-        return render_template('game.html', ui=ui)
+        return render_template('game.html', ui=ui, variables=None)
 
     @app.route('/error', methods=['POST', 'GET'])
     def error():
         player = ui.wname if board.turn == "white" else ui.bname
+        ui.board = board.display()
         ui.errmsg = f'Invalid move for {player}'
         ui.next_link = '/validation'
-        return render_template('game.html', ui=ui)
+        return render_template('game.html', ui=ui, variables=None)
 
     @app.route('/promotion', methods=['POST', 'GET'])
     def promotion():
+        print("promotion page")
             # /promote path must always have coord in GET parameter so that
         # board knows where the pawn to be promoted is
-        print("promotion page")
-        coord = request.args['coord']
-        print('processed digits', coord)
-        # coord = (digits[0], digits[1])
         # Process pawn promotion
         # Player will be prompted for another input if invalid
         if request.method == 'POST':
             print('USING POST')
             char = request.form['move'].lower()
+            pattern = r"\(\d, \d\)"
+            temp = request.form['variables']
+            start, end = re.findall(pattern, temp)
+            print(start, end)
+
             if char in 'rkbq':
                 board.promote_pawn(coord,
                                 char,
@@ -62,42 +66,49 @@ def main():
                                 )
                 return redirect('/play')
             else:
+                print('WRONG LETTER')
                 ui.errmsg = 'Invalid input (r, k, b, or q only). Please try again.'
-                return redirect('/promotion', coord=coord)
-        else:
+                print(start,end)
+                return redirect(f'/promotion?start={start}&end={end}')
+
+        elif request.method == 'GET':
+            start, end = request.args['start'], request.args['end']
+            print('start', start, '\tend', end)
             print('USING', request.method)
             ui.board = board.display()
-            ui.inputlabel = f'Promote pawn at {coord} to (r, k, b, q): '
+            ui.inputlabel = f'Promote pawn at {end} to (r, k, b, q): '
             ui.btnlabel = 'Promote'
             ui.next_link = '/promotion'
-            return render_template('game.html', ui=ui)
+            return render_template('game.html', ui=ui, variables=(start, end))
 
     @app.route('/validation', methods=['POST', 'GET'])
     def validation():
         move = request.form['move']
-        ui.errmsg = None
+        ui.errmsg = ''
         status = board.prompt(move, ui)
         if status == 'error':
             return redirect('/error')
         else:
-
             start, end = status
             if board.movetype(start, end) == 'promotion':
-                return redirect(f'/promotion?coord={start}')
-            board.update(start, end)
-            opponent_colour = 'black' if board.turn == 'white' else 'white'
-            if board.checkmate_checking(opponent_colour):
-                ui.winner=board.turn
-                return redirect('/winner')
+                board.update(start, end)
+                return redirect(f'/promotion?start={start}&end={end}')
+            else:
+                board.update(start, end)
+                opponent_colour = 'black' if board.turn == 'white' else 'white'
+                if board.checkmate_checking(opponent_colour):
+                    ui.winner=board.turn
+                    return redirect('/winner')
 
             move = (start,end)
             history.push(move)
+            print(history)
             return redirect('/play')
 
     @app.route('/winner')
     def winner():
         ui.winner = ui.wname if board.turn == "white" else ui.bname
-        return render_template('winner.html',ui=ui)
+        return render_template('winner.html',ui=ui, variables=None)
 
             
     @app.route('/undo',methods=['POST','GET'])
