@@ -44,7 +44,8 @@ def main():
     def promotion():
         move([
             '01 03', '16 14', '03 14', '17 25', '14 15', '06 05', '15 16', '05 04', '16 17'])
-
+        time.sleep(5)
+        move(['q'])
     # fool_mate()
     promotion()
 
