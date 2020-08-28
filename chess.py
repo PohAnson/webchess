@@ -8,6 +8,7 @@ class WebInterface:
         self.wname = 'White player'
         self.bname = 'Black player'
         self.winner = None
+        self.info = None
 
 class Cell:
     number = 0
@@ -351,6 +352,20 @@ class Board:
                 return True
         return False
 
+    # def promotepawns(self, PieceClass=None):
+    #     for coord in self.coords():
+    #         row = coord[1]
+    #         piece = self.get_piece(coord)
+    #         for opprow, colour in zip([0, 7], ['black', 'white']):
+    #             if row == opprow and piece.name == 'pawn' \
+    #                     and piece.colour == colour:
+    #                 if PieceClass is None:
+    #                     PieceClass = self.promoteprompt()
+    #                 promoted_piece = PieceClass(colour)
+    #                 self.remove(coord)
+    #                 self.add(coord, promoted_piece)
+
+
     def promotepawns(self, PieceClass=None):
         for coord in self.coords():
             row = coord[1]
@@ -358,11 +373,14 @@ class Board:
             for opprow, colour in zip([0, 7], ['black', 'white']):
                 if row == opprow and piece.name == 'pawn' \
                         and piece.colour == colour:
+                    print(PieceClass)
                     if PieceClass is None:
-                        PieceClass = self.promoteprompt()
-                    promoted_piece = PieceClass(colour)
-                    self.remove(coord)
-                    self.add(coord, promoted_piece)
+                        return True
+                    else:
+                        promoted_piece = PieceClass(colour)
+                        self.info = f"Promoted pawn at {coord} to {promoted_piece.name}"
+                        self.remove(coord)
+                        self.add(coord, promoted_piece)
 
     def king_and_rook_unmoved(self, colour, rook_coord):
         row = rook_coord[1]

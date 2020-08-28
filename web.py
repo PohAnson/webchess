@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect
 from chess import Board, WebInterface
 from movehistory import MoveHistory
-import time
 import re
+from chess import Rook, Knight, Bishop, Queen
 
 def main():
     app = Flask(__name__)
@@ -52,34 +52,54 @@ def main():
         # Process pawn promotion
         # Player will be prompted for another input if invalid
         if request.method == 'POST':
-            print('USING POST')
-            char = request.form['move'].lower()
+            piece = request.form['move'].lower()
             pattern = r"\(\d, \d\)"
             temp = request.form['variables']
             start, end = re.findall(pattern, temp)
-            print(start, end)
 
-            if char in 'rkbq':
-                board.promote_pawn(coord,
-                                char,
-                                push_to=history.this_move(),
-                                )
+            if piece in 'rkbq':
+                if piece == 'r':
+                    PieceClass = Rook
+                elif piece == 'k':
+                    PieceClass = Knight
+                elif piece == 'b':
+                    PieceClass = Bishop
+                elif piece == 'q':
+                    PieceClass = Queen
+                board.promotepawns(PieceClass)
                 return redirect('/play')
             else:
-                print('WRONG LETTER')
                 ui.errmsg = 'Invalid input (r, k, b, or q only). Please try again.'
-                print(start,end)
                 return redirect(f'/promotion?start={start}&end={end}')
 
         elif request.method == 'GET':
             start, end = request.args['start'], request.args['end']
-            print('start', start, '\tend', end)
-            print('USING', request.method)
             ui.board = board.display()
             ui.inputlabel = f'Promote pawn at {end} to (r, k, b, q): '
             ui.btnlabel = 'Promote'
             ui.next_link = '/promotion'
             return render_template('game.html', ui=ui, variables=(start, end))
+
+
+
+
+    # def promotion():
+    #     piece = request.args.get("promote", None)
+    #     if piece is None:
+    #         return render_template('game.html', ui=ui)
+    #     else:
+    #         if piece == 'Rook':
+    #             PieceClass = Rook
+    #         elif piece == 'Knight':
+    #             PieceClass = Knight
+    #         elif piece == 'Bishop':
+    #             PieceClass = Bishop
+    #         elif piece == 'Queen':
+    #             PieceClass = Queen
+    #         board.promotepawns(PieceClass)
+    #         ui.board = board.display()
+    #         ui.info = game.info
+    #         return redirect("/play")
 
     @app.route('/validation', methods=['POST', 'GET'])
     def validation():
