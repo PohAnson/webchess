@@ -127,7 +127,7 @@ def main():
 
     @app.route('/winner')
     def winner():
-        ui.winner = ui.wname if board.turn == "white" else ui.bname
+        ui.winner = ui.wname if ui.winner == "white" else ui.bname
         return render_template('winner.html',ui=ui, variables=None)
 
             

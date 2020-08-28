@@ -622,7 +622,9 @@ class Board:
             for move in attacking_valid_move_set:
                 if self.movetype(
                         coord, move) != None and not self.check(colour, coord, move):
+                    self.turn = initial_turn
                     return False
+        self.turn = initial_turn
         return True
 
     def start(self):
