@@ -23,7 +23,10 @@
       </tr>
       {% endfor %}
     </table>
+
     <form action="{{ ui.next_link }}" method="post">
+      <!-- hidden field to pass variables -->    
+      <input type="hidden" name="variables" value="{{ variables }}" />
       <p>{{ ui.inputlabel }}</p>
       <input type="text" name="move" value="" />
       <p>{{ ui.errmsg }}</p>
